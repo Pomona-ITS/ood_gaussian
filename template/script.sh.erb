@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+# Clean the environment
+module purge
+
+# Set working directory to home directory
+cd "${HOME}"
+
+#xfce
+source "<%= session.staged_root.join("desktops", "#{context.desktop}.sh") %>" 
+#
+# Start gaussian
+#
+
+module load gaussian/<%= context.pom_gaussian_versions %>
+module load gaussview/<%= context.pom_gaussview_versions %>
+
+module list
+set -x
+gview.sh
