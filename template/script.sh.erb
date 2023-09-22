@@ -11,7 +11,7 @@ source "<%= session.staged_root.join("desktops", "#{context.desktop}.sh") %>"
 #
 # Start gaussian
 #
-
+module load nbo/<%= context.pom_nbo_versions %>
 module load gaussian/<%= context.pom_gaussian_versions %>
 module load gaussview/<%= context.pom_gaussview_versions %>
 

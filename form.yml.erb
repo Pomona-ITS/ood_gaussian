@@ -26,6 +26,20 @@
     error = e.message.strip
   end
 -%>
+<%-
+  cmd = "source /etc/profile.d/hpc_software.sh; ls $HPC_SOFTWARE/nbo/"
+  begin
+    output, status = Open3.capture2e(cmd)
+    if status.success?
+      nbo_versions = output.split("\n").map(&:strip).reject(&:blank?).reverse
+    else
+      raise output
+    end
+  rescue => e
+    nbo_versions = []
+    error = e.message.strip
+  end
+-%>
 ---
 cluster: "pomona"
 # cacheable: false
@@ -65,6 +79,14 @@ attributes:
     <%- gaussview_versions.each do |q| -%>
       - [ "<%= q %>", "<%= q %>" ]
     <%- end -%>
+  pom_nbo_versions:
+    label: "NBO Version"
+    required: true
+    widget: select
+    options:
+    <%- nbo_versions.each do |q| -%>
+      - [ "<%= q %>", "<%= q %>" ]
+    <%- end -%>
   pom_num_hours:
     widget: "number_field"
     label: "Number of hours"
@@ -94,6 +116,7 @@ form:
   - pom_partitions
   - pom_gaussian_versions
   - pom_gaussview_versions
+  - pom_nbo_versions
   - pom_num_hours
   - pom_num_cores
   - pom_num_memories
